@@ -7,7 +7,7 @@ productRoutes.get("/", async(req,res)=>{
     try{
         let filter = {};
         let sort = {};
-        
+        let limit = parseInt(req.query.limit) || 12;
         // Search by name
         if(req.query.name){
             filter.name = { $regex: req.query.name, $options: 'i' }; 
@@ -18,7 +18,7 @@ productRoutes.get("/", async(req,res)=>{
             sort.price = req.query.sortByPrice === 'asc' ? 1 : -1;
         }
 
-        const products = await AirdopesModel.find(filter).sort(sort);
+        const products = await AirdopesModel.find(filter).sort(sort).limit(limit);
         res.status(200).send({products});
 
     }catch(err){
