@@ -8,7 +8,8 @@ const airdropsSchema = mongoose.Schema({
     regularPrice:Number,
     discount:Number,
     features:Array,
-    playback:Number
+    playback:String,
+    name:String
 
 },{versionKey:false})
 

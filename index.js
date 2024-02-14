@@ -1,7 +1,7 @@
 const express = require("express");
 const { connection } = require("./db");
 const cors = require("cors");
-const { airdropsRoutes } = require("./routes/Airdrops.routes");
+const { productRoutes } = require("./routes/product.routes");
 
 const app= express();
 
@@ -12,7 +12,7 @@ app.get("/",(req,res)=>{
     res.send("Hello")
 })
 
-app.use("/airdrops",airdropsRoutes);
+app.use("/products",productRoutes);
 
 app.listen(process.env.PORT , async()=>{
     try{
