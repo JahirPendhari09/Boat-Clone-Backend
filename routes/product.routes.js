@@ -5,8 +5,21 @@ const productRoutes = express.Router();
 
 productRoutes.get("/", async(req,res)=>{
     try{
-        const product = await AirdopesModel.find();
-        res.status(200).send({product})
+        let filter = {};
+        let sort = {};
+        
+        // Search by name
+        if(req.query.name){
+            filter.name = { $regex: req.query.name, $options: 'i' }; 
+        }
+
+        // Sorting by price
+        if(req.query.sortByPrice){
+            sort.price = req.query.sortByPrice === 'asc' ? 1 : -1;
+        }
+
+        const products = await AirdopesModel.find(filter).sort(sort);
+        res.status(200).send({products});
 
     }catch(err){
         res.status(500).send({"error":err})
@@ -16,8 +29,12 @@ productRoutes.get("/", async(req,res)=>{
 productRoutes.post("/create", async(req,res)=>{
 
     try{
-        const product = new AirdopesModel(req.body)
-        await product.save();
+        // const product = new AirdopesModel(req.body)
+        // await product.save();
+        const products = req.body; // Assuming req.body is an array of products
+
+        // Using insertMany to insert multiple products at once
+        const insertedProducts = await AirdopesModel.insertMany(products);
 
         res.status(201).send({"msg":"New product has been Added","new product":req.body})
 
